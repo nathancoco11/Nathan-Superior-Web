@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏪 Armazém de Usuários - Nathan Superior Web</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: #000000;
+            color: #f0f0f0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: #0a0a0a;
+            border-radius: 15px;
+            border: 2px solid #0ff;
+            box-shadow: 0 0 20px #0ff;
+        }
+
+        .header h1 {
+            color: #0ff;
+            font-size: 3em;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #ccc;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .voltar-btn {
+            display: inline-block;
+            background: #0a0a0a;
+            color: #0ff;
+            padding: 12px 25px;
+            border: 2px solid #0ff;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px #0ff;
+            font-size: 1.1em;
+        }
+
+        .voltar-btn:hover {
+            background: #0ff;
+            color: #000;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #0ff;
+        }
+
+        .total-usuarios {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            border: 1px solid #0ff;
+            box-shadow: 0 0 15px #0ff;
+        }
+
+        .total-usuarios h2 {
+            color: #0ff;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .contador {
+            font-size: 3em;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            font-weight: bold;
+        }
+
+        .usuarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .usuario-card {
+            background: #0a0a0a;
+            border: 2px solid #0ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 15px #0ff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usuario-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .usuario-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 30px #0ff, 0 0 50px #0ff;
+        }
+
+        .usuario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #0ff;
+        }
+
+        .usuario-header h3 {
+            color: #0ff;
+            font-size: 1.5em;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        .data {
+            color: #888;
+            font-size: 0.9em;
+            background: #111;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #0ff;
+        }
+
+        .usuario-info {
+            background: #111;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #0ff;
+        }
+
+        .usuario-info p {
+            margin: 12px 0;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .usuario-info strong {
+            color: #0ff;
+        }
+
+        .status-ativo {
+            color: #27ae60;
+            font-weight: bold;
+            text-shadow: 0 0 5px #27ae60;
+        }
+
+        .sem-usuarios {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+            font-size: 1.3em;
+            grid-column: 1 / -1;
+        }
+
+        .sem-usuarios i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #0ff;
+        }
+
+        .acoes {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-acao {
+            flex: 1;
+            padding: 8px 15px;
+            border: 1px solid #0ff;
+            background: transparent;
+            color: #0ff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-acao:hover {
+            background: #0ff;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .usuarios-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .contador {
+                font-size: 2em;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 ARMAZÉM DE USUÁRIOS</h1>
+            <p>Painel de controle - Todos os usuários registrados no sistema</p>
+            <p><strong>Desenvolvido por Nathan</strong> - Sistema de Gerenciamento</p>
+            <a href="index.html" class="voltar-btn">
+                <i class="fas fa-arrow-left"></i> Voltar para o Site Principal
+            </a>
+        </div>
+
+        <div class="total-usuarios">
+            <h2>TOTAL DE USUÁRIOS REGISTRADOS</h2>
+            <div class="contador" id="totalUsuarios">0</div>
+        </div>
+
+        <div class="usuarios-grid" id="usuariosGrid">
+            <!-- Os usuários serão carregados aqui pelo JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        function carregarUsuarios() {
+            const armazemData = localStorage.getItem('armazem_usuarios') || '';
+            const usuariosGrid = document.getElementById('usuariosGrid');
+            const totalUsuarios = document.getElementById('totalUsuarios');
+            
+            if (!armazemData) {
+                usuariosGrid.innerHTML = `
+                    <div class="sem-usuarios">
+                        <i class="fas fa-database"></i>
+                        <h3>Nenhum usuário registrado ainda</h3>
+                        <p>Os usuários aparecerão aqui quando se registrarem no site principal</p>
+                    </div>
+                `;
+                totalUsuarios.textContent = '0';
+                return;
+            }
+            
+            // Contar quantos usuários temos
+            const matches = armazemData.match(/<!-- USUÁRIO REGISTRADO -->/g);
+            const total = matches ? matches.length : 0;
+            totalUsuarios.textContent = total;
+            
+            // Mostrar todos os usuários
+            usuariosGrid.innerHTML = armazemData;
+            
+            // Adicionar funcionalidade aos botões de ação
+            document.querySelectorAll('.btn-acao').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const acao = this.textContent;
+                    const usuarioCard = this.closest('.usuario-card');
+                    const nomeUsuario = usuarioCard.querySelector('h3').textContent;
+                    
+                    alert(`Ação: ${acao}\nUsuário: ${nomeUsuario}`);
+                });
+            });
+        }
+
+        // Atualizar a cada 2 segundos para mostrar novos usuários em tempo real
+        setInterval(carregarUsuarios, 2000);
+        
+        // Carregar inicialmente
+        carregarUsuarios();
+        
+        // Efeito especial quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 1s';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

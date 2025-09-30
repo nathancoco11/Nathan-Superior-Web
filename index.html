@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nathan Superior Web - Site Oficial</title>
+    
+    <style>
+        /* Adicionando zoom de 110% para todo o documento */
+        body {
+            zoom: 110%;
+            -moz-transform: scale(1.1);
+            -moz-transform-origin: 0 0;
+        }
+        
+        /* Para outros navegadores */
+        @media all and (-webkit-min-device-pixel-ratio:0) {
+            body {
+                zoom: 110%;
+            }
+        }
+    </style>
+    
+    <script>
+        (function() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.documentElement.classList.add('dark-mode');
+            }
+            
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (isLoggedIn) {
+                document.body.classList.add('logged-in');
+            }
+            
+            const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isSidebarCollapsed) {
+                document.querySelector('.sidebar-content').style.display = 'none';
+                document.querySelector('.sidebar-toggle i').classList.replace('fa-chevron-up', 'fa-chevron-down');
+            }
+        })();
+    </script>
+    
+    <style>
+        :root {
+            --verde: #27ae60;
+            --azul: #3498db;
+            --vermelho: #e74c3c;
+            --amarelo: #f1c40f;
+            --texto: #f0f0f0;
+            --fundo: #000000;
+            --card: #0a0a0a;
+            --borda: #222;
+            --neon-ciano: #0ff;
+            --neon-azul: #00f;
+            --neon-marinho: #0077be;
+        }
+
+        .dark-mode {
+            --verde: #1e8449;
+            --azul: #2980b9;
+            --vermelho: #ff6b6b;
+            --amarelo: #f39c12;
+            --texto: #f0f0f0;
+            --fundo: #000000;
+            --card: #0a0a0a;
+            --borda: #222;
+            --neon-ciano: #0ff;
+            --neon-azul: #00f;
+            --neon-marinho: #0077be;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body {
+            background: var(--fundo);
+            color: var(--texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animação de bolinhas neon no fundo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .neon-circle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(8px);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(30px, -40px) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-20px, 30px) scale(0.9);
+                opacity: 0.7;
+            }
+            75% {
+                transform: translate(40px, 20px) scale(1.2);
+                opacity: 0.4;
+            }
+        }
+
+        .navbar {
+            background: rgba(10, 10, 10, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--neon-ciano);
+            box-shadow: 0 0 10px var(--neon-ciano), 0 0 20px var(--neon-azul);
+        }
+
+        .logo {
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 5px var(--neon-ciano), 0 0 10px var(--neon-ciano);
+        }
+
+        .logo small {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        #theme-toggle {
+            color: var(--neon-ciano);
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px var(--neon-ciano), 0 0 20px var(--neon-ciano);
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 15px;
+            border: 1px solid var(--neon-ciano);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--texto);
+            box-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-ciano), 0 0 20px var(--neon-azul);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .nav-icon:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px var(--neon-ciano), 0 0 20px var(--neon-ciano);
+        }
+
+        /* Ícone do desenvolvedor - só aparece para a conta dev */
+        .dev-icon {
+            display: none;
+        }
+
+        body.dev-mode .dev-icon {
+            display: block;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 68px);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            background: var(--card);
+            width: 35%;
+            padding: 15px;
+            border-right: 1px solid var(--borda);
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid var(--neon-ciano);
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--neon-ciano);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 10px var(--neon-ciano);
+        }
+
+        .sidebar-content {
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: var(--neon-ciano);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--neon-azul);
+            display: inline-block;
+            padding-bottom: 5px;
+            font-size: 1.4rem;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .sidebar p {
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+        }
+
+        .destaque {
+            color: var(--neon-ciano);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .content {
+            width: 65%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .btn {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 2px solid var(--neon-ciano);
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 0 5px var(--neon-ciano), 0 0 10px var(--neon-azul);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+            z-index: 0;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateX(8px);
+            box-shadow: 0 0 15px var(--neon-ciano), 0 0 30px var(--neon-azul);
+        }
+
+        .btn i {
+            color: var(--neon-ciano);
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        /* Botão do desenvolvedor - só aparece para a conta dev */
+        .dev-btn {
+            display: none;
+            background: rgba(255, 215, 0, 0.1);
+            border-color: gold;
+        }
+
+        body.dev-mode .dev-btn {
+            display: flex;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--texto);
+            opacity: 0.8;
+            background: var(--card);
+            border-top: 1px solid var(--borda);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            .search-bar {
+                order: 3;
+                width: 100%;
+                margin: 15px 0 0 0;
+            }
+            .container {
+                flex-direction: column;
+            }
+            .sidebar, .content {
+                width: 100%;
+            }
+            .btn {
+                padding: 12px 15px;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 15px var(--neon-ciano), 0 0 30px var(--neon-azul);
+            position: relative;
+            border: 1px solid var(--neon-ciano);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--vermelho);
+            text-shadow: 0 0 5px var(--vermelho);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--neon-ciano);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--neon-ciano);
+            border-radius: 5px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--texto);
+            box-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-ciano);
+        }
+
+        .login-btn {
+            background: var(--neon-marinho);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 0 5px var(--neon-marinho);
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #0066aa;
+            box-shadow: 0 0 10px var(--neon-marinho), 0 0 20px var(--neon-azul);
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .switch-btn {
+            background: none;
+            border: none;
+            color: var(--neon-ciano);
+            cursor: pointer;
+            text-decoration: underline;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--neon-ciano);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+            box-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--neon-ciano);
+        }
+
+        body.logged-in .user-info {
+            display: flex;
+        }
+
+        body.logged-in .login-btn-nav {
+            display: none;
+        }
+
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--verde);
+            border: 1px solid var(--verde);
+            box-shadow: 0 0 5px var(--verde);
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--vermelho);
+            border: 1px solid var(--vermelho);
+            box-shadow: 0 0 5px var(--vermelho);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i id="theme-toggle" class="fas fa-star" title="Mudar tema"></i>
+            <span>Nathan Superior Web <small>- Site Oficial</small></span>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquise por spoilers, vídeos...">
+        </div>
+        
+        <div class="nav-icons">
+            <a href="index.html" class="nav-icon" title="Início">
+                <i class="fas fa-home"></i>
+            </a>
+            <!-- Ícone do desenvolvedor - só aparece para a conta dev -->
+            <a href="armazem1.html" class="nav-icon dev-icon" title="Painel do Desenvolvedor">
+                <i class="fas fa-code"></i>
+            </a>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </div>
+            <button class="nav-icon login-btn-nav" id="loginBtnNav" title="Login">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            
+            <div id="loginForm">
+                <h2 style="color: var(--neon-ciano); margin-bottom: 20px; text-align: center; text-shadow: 0 0 5px var(--neon-ciano);">Entrar</h2>
+                
+                <form id="login">
+                    <div class="form-group">
+                        <label for="loginUsername"><i class="fas fa-user"></i> Nome de Usuário</label>
+                        <input type="text" id="loginUsername" placeholder="Seu nome de usuário" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Senha</label>
+                        <input type="password" id="loginPassword" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                    
+                    <div id="loginMessage" class="status-message" style="display: none;"></div>
+                </form>
+                
+                <div class="switch-form">
+                    <span>Não tem uma conta? </span>
+                    <button class="switch-btn" id="showRegister">Registre-se</button>
+                </div>
+            </div>
+            
+            <div id="registerForm" style="display: none;">
+                <h2 style="color: var(--neon-ciano); margin-bottom: 20px; text-align: center; text-shadow: 0 0 5px var(--neon-ciano);">Criar Conta</h2>
+                
+                <form id="register">
+                    <div class="form-group">
+                        <label for="registerUsername"><i class="fas fa-user-edit"></i> Nome de Usuário</label>
+                        <input type="text" id="registerUsername" placeholder="Escolha um nome de usuário" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword"><i class="fas fa-key"></i> Senha</label>
+                        <input type="password" id="registerPassword" placeholder="Crie uma senha" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword"><i class="fas fa-check-circle"></i> Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" placeholder="Digite a senha novamente" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn"><i class="fas fa-user-plus"></i> Registrar</button>
+                    
+                    <div id="registerMessage" class="status-message" style="display: none;"></div>
+                </form>
+                
+                <div class="switch-form">
+                    <span>Já tem uma conta? </span>
+                    <button class="switch-btn" id="showLogin">Faça login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <h2>Bem-vindo ao site oficial!</h2>
+                <p id="welcomeMessage">Este é o <strong>site oficial de Nathan</strong>, onde ele compartilha <span class="destaque">conteúdos exclusivos</span> e <span class="destaque">novidades</span> com seus fãs.</p>
+                
+                <h2>Como navegar?</h2>
+                <p>Utilize os botões ao lado → <i class="fas fa-arrow-right" style="color: var(--neon-ciano); text-shadow: 0 0 5px var(--neon-ciano);"></i> O site foi cuidadosamente organizado para facilitar sua experiência.</p>
+                
+                <h2>Mensagem de Nathan:</h2>
+                <p>"Queria ter um espaço especial para compartilhar minha jornada com vocês. Espero que gostem de tudo que preparei!" <i class="fas fa-heart" style="color: var(--neon-ciano); text-shadow: 0 0 5px var(--neon-ciano);"></i></p>
+            </div>
+        </div>
+        
+        <div class="content">
+            <a href="personagens.html" class="btn">
+                <i class="fas fa-users"></i> Personagens
+            </a>
+            <a href="spoilers.html" class="btn">
+                <i class="fas fa-surprise"></i> Spoilers Exclusivos
+            </a>
+            <a href="videos.html" class="btn">
+                <i class="fas fa-video"></i> Melhores Vídeos
+            </a>
+            <a href="contato.html" class="btn">
+                <i class="fas fa-comments"></i> Contato
+            </a>
+            <a href="posts.html" class="btn">
+                <i class="fas fa-blog"></i> Posts e Atualizações
+            </a>
+            <a href="noticias.html" class="btn">
+                <i class="fas fa-newspaper"></i> Notícias
+            </a>
+            
+            <!-- Botão do desenvolvedor - só aparece para a conta dev -->
+            <a href="armazem1.html" class="btn dev-btn">
+                <i class="fas fa-code"></i> 🛠️ Painel do Desenvolvedor
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Site oficial desenvolvido por Nathan • Todos os direitos reservados • Atualizado regularmente</p>
+    </div>
+
+    <script>
+        // Elementos principais
+        const themeToggle = document.getElementById('theme-toggle');
+        const loginModal = document.getElementById('loginModal');
+        const loginBtnNav = document.getElementById('loginBtnNav');
+        const closeBtn = document.querySelector('.close');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginSubmit = document.getElementById('login');
+        const registerSubmit = document.getElementById('register');
+        const loginMessage = document.getElementById('loginMessage');
+        const registerMessage = document.getElementById('registerMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userAvatar = document.getElementById('userAvatar');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarContent = document.querySelector('.sidebar-content');
+
+        // ✅ CONTA DE DESENVOLVEDOR
+        const DEV_ACCOUNT = {
+            username: "dev_nathan",
+            password: "dev1234"
+        };
+
+        // ✅ FUNÇÃO para salvar no armazem1.html
+        function salvarNoArmazem(usuario) {
+            const dadosUsuario = `
+<!-- USUÁRIO REGISTRADO -->
+<div class="usuario-card">
+    <div class="usuario-header">
+        <h3>👤 ${usuario.username}</h3>
+        <span class="data">${usuario.dataRegistro}</span>
+    </div>
+    <div class="usuario-info">
+        <p><strong>ID:</strong> ${usuario.id}</p>
+        <p><strong>Senha:</strong> ${usuario.password}</p>
+        <p><strong>Status:</strong> <span class="status-ativo">✅ ATIVO</span></p>
+    </div>
+</div>
+<!-- FIM USUÁRIO -->
+`;
+
+            const armazemAtual = localStorage.getItem('armazem_usuarios') || '';
+            const novoArmazem = armazemAtual + dadosUsuario;
+            localStorage.setItem('armazem_usuarios', novoArmazem);
+            
+            console.log('✅ Usuário salvo no armazem!');
+        }
+
+        // ✅ VERIFICAR SE É CONTA DE DESENVOLVEDOR
+        function checkDevMode(username) {
+            if (username === DEV_ACCOUNT.username) {
+                document.body.classList.add('dev-mode');
+                console.log('🔧 Modo desenvolvedor ativado!');
+            } else {
+                document.body.classList.remove('dev-mode');
+            }
+        }
+
+        // Alternar sidebar
+        sidebarToggle.addEventListener('click', () => {
+            const icon = sidebarToggle.querySelector('i');
+            
+            if (sidebarContent.style.display === 'none') {
+                sidebarContent.style.display = 'block';
+                icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                localStorage.setItem('sidebarCollapsed', 'false');
+            } else {
+                sidebarContent.style.display = 'none';
+                icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                localStorage.setItem('sidebarCollapsed', 'true');
+            }
+        });
+
+        // Verificar status de login
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const username = localStorage.getItem('currentUser');
+            
+            if (isLoggedIn && username) {
+                document.body.classList.add('logged-in');
+                userAvatar.textContent = username.charAt(0).toUpperCase();
+                welcomeMessage.innerHTML = `Bem-vindo de volta, <strong>${username}</strong>! Este é o <strong>site oficial de Nathan</strong>, onde ele compartilha <span class="destaque">conteúdos exclusivos</span> e <span class="destaque">novidades</span> com seus fãs.`;
+                
+                // Verificar se é conta de desenvolvedor
+                checkDevMode(username);
+            }
+        }
+
+        // Alternar tema
+        function applyTheme() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            document.documentElement.classList.toggle('dark-mode', isDark);
+            themeToggle.style.color = isDark ? '#f39c12' : '#f1c40f';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = !document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            
+            themeToggle.style.transform = 'rotate(360deg) scale(1.2)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 300);
+            
+            applyTheme();
+        });
+
+        // Modal de login
+        loginBtnNav.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+
+        // Alternar entre login e registro
+        showRegister.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+
+        showLogin.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        // Registrar usuário
+        registerSubmit.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showMessage(registerMessage, "As senhas não coincidem!", 'error');
+                return;
+            }
+
+            if (password.length < 4) {
+                showMessage(registerMessage, "A senha deve ter pelo menos 4 caracteres!", 'error');
+                return;
+            }
+
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || '[]');
+            
+            if (usuarios.some(u => u.username === username)) {
+                showMessage(registerMessage, "Este usuário já existe!", 'error');
+                return;
+            }
+            
+            const novoUsuario = { 
+                username, 
+                password,
+                id: Date.now(),
+                dataRegistro: new Date().toLocaleString('pt-BR')
+            };
+            
+            usuarios.push(novoUsuario);
+            localStorage.setItem('usuarios_magicos', JSON.stringify(usuarios));
+            
+            // ✅ CHAMAR FUNÇÃO PARA SALVAR NO ARMAZEM
+            salvarNoArmazem(novoUsuario);
+            
+            showMessage(registerMessage, "Conta criada com sucesso! ✅", 'success');
+            
+            this.reset();
+            
+            setTimeout(() => {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                registerMessage.style.display = 'none';
+            }, 2000);
+        });
+
+        // Login
+        loginSubmit.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // ✅ VERIFICAR SE É CONTA DE DESENVOLVEDOR
+            if (username === DEV_ACCOUNT.username && password === DEV_ACCOUNT.password) {
+                showMessage(loginMessage, "🔧 Acesso de desenvolvedor concedido!", 'success');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', username);
+                
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    checkLoginStatus();
+                }, 1000);
+                return;
+            }
+            
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || []);
+            const user = usuarios.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                showMessage(loginMessage, "Login bem-sucedido!", 'success');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', username);
+                
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    checkLoginStatus();
+                }, 1000);
+            } else {
+                showMessage(loginMessage, "Usuário ou senha incorretos!", 'error');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.setItem('isLoggedIn', 'false');
+            localStorage.removeItem('currentUser');
+            document.body.classList.remove('logged-in');
+            document.body.classList.remove('dev-mode');
+            welcomeMessage.innerHTML = 'Este é o <strong>site oficial de Nathan</strong>, onde ele compartilha <span class="destaque">conteúdos exclusivos</span> e <span class="destaque">novidades</span> com seus fãs.';
+        });
+
+        // Mostrar mensagens
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.style.display = 'block';
+            element.className = `status-message ${type}`;
+        }
+
+        // Criar bolinhas neon no fundo
+        function createNeonCircles() {
+            const colors = ['var(--neon-ciano)', 'var(--neon-azul)', 'var(--neon-marinho)'];
+            const body = document.body;
+            
+            document.querySelectorAll('.neon-circle').forEach(el => el.remove());
+            
+            for (let i = 0; i < 15; i++) {
+                const circle = document.createElement('div');
+                circle.classList.add('neon-circle');
+                
+                const size = Math.random() * 80 + 20;
+                circle.style.width = `${size}px`;
+                circle.style.height = `${size}px`;
+                
+                circle.style.left = `${Math.random() * 100}vw`;
+                circle.style.top = `${Math.random() * 100}vh`;
+                
+                circle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                circle.style.boxShadow = `0 0 15px ${circle.style.background}, 0 0 30px ${circle.style.background}`;
+                
+                circle.style.animationDelay = `${Math.random() * 5}s`;
+                circle.style.animationDuration = `${15 + Math.random() * 10}s`;
+                
+                body.appendChild(circle);
+            }
+        }
+
+        // Inicializar
+        window.addEventListener('load', createNeonCircles);
+        window.addEventListener('resize', createNeonCircles);
+        applyTheme();
+        checkLoginStatus();
+    </script>
+</body>
+</html>
