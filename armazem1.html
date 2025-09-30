@@ -259,7 +259,9 @@
             const usuariosGrid = document.getElementById('usuariosGrid');
             const totalUsuarios = document.getElementById('totalUsuarios');
             
-            if (!armazemData) {
+            console.log('📁 Dados do armazem:', armazemData);
+            
+            if (!armazemData || armazemData.trim() === '') {
                 usuariosGrid.innerHTML = `
                     <div class="sem-usuarios">
                         <i class="fas fa-database"></i>
@@ -279,16 +281,7 @@
             // Mostrar todos os usuários
             usuariosGrid.innerHTML = armazemData;
             
-            // Adicionar funcionalidade aos botões de ação
-            document.querySelectorAll('.btn-acao').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const acao = this.textContent;
-                    const usuarioCard = this.closest('.usuario-card');
-                    const nomeUsuario = usuarioCard.querySelector('h3').textContent;
-                    
-                    alert(`Ação: ${acao}\nUsuário: ${nomeUsuario}`);
-                });
-            });
+            console.log('✅ Usuários carregados:', total);
         }
 
         // Atualizar a cada 2 segundos para mostrar novos usuários em tempo real
