@@ -704,8 +704,11 @@
             password: "dev1234"
         };
 
-        // ✅ FUNÇÃO para salvar no armazem1.html
+        // ✅ FUNÇÃO CORRIGIDA para salvar no armazem1.html
         function salvarNoArmazem(usuario) {
+            console.log('🔄 Tentando salvar usuário:', usuario);
+            
+            // Criar dados formatados para a página
             const dadosUsuario = `
 <!-- USUÁRIO REGISTRADO -->
 <div class="usuario-card">
@@ -722,11 +725,23 @@
 <!-- FIM USUÁRIO -->
 `;
 
-            const armazemAtual = localStorage.getItem('armazem_usuarios') || '';
-            const novoArmazem = armazemAtual + dadosUsuario;
-            localStorage.setItem('armazem_usuarios', novoArmazem);
-            
-            console.log('✅ Usuário salvo no armazem!');
+            try {
+                // ✅ CORREÇÃO: Verificar se já existe dados no armazem
+                let armazemAtual = localStorage.getItem('armazem_usuarios');
+                console.log('📁 Armazem atual:', armazemAtual);
+                
+                if (!armazemAtual) {
+                    armazemAtual = '';
+                }
+                
+                const novoArmazem = armazemAtual + dadosUsuario;
+                localStorage.setItem('armazem_usuarios', novoArmazem);
+                
+                console.log('✅ Usuário salvo no armazem!');
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar no armazem:', error);
+            }
         }
 
         // ✅ VERIFICAR SE É CONTA DE DESENVOLVEDOR
@@ -814,7 +829,7 @@
             loginForm.style.display = 'block';
         });
 
-        // Registrar usuário
+        // ✅ REGISTRAR USUÁRIO - VERSÃO CORRIGIDA
         registerSubmit.addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('registerUsername').value;
@@ -831,7 +846,14 @@
                 return;
             }
 
-            const usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || '[]');
+            // ✅ CORREÇÃO: Inicializar array se não existir
+            let usuarios = [];
+            try {
+                usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || '[]');
+            } catch (error) {
+                console.log('📝 Criando novo array de usuários');
+                usuarios = [];
+            }
             
             if (usuarios.some(u => u.username === username)) {
                 showMessage(registerMessage, "Este usuário já existe!", 'error');
@@ -846,7 +868,16 @@
             };
             
             usuarios.push(novoUsuario);
-            localStorage.setItem('usuarios_magicos', JSON.stringify(usuarios));
+            
+            // ✅ CORREÇÃO: Salvar no localStorage
+            try {
+                localStorage.setItem('usuarios_magicos', JSON.stringify(usuarios));
+                console.log('💾 Usuário salvo no localStorage:', novoUsuario);
+            } catch (error) {
+                console.error('❌ Erro ao salvar no localStorage:', error);
+                showMessage(registerMessage, "Erro ao salvar usuário!", 'error');
+                return;
+            }
             
             // ✅ CHAMAR FUNÇÃO PARA SALVAR NO ARMAZEM
             salvarNoArmazem(novoUsuario);
@@ -862,11 +893,13 @@
             }, 2000);
         });
 
-        // Login
+        // ✅ LOGIN - VERSÃO CORRIGIDA
         loginSubmit.addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+            
+            console.log('🔐 Tentando login:', username);
             
             // ✅ VERIFICAR SE É CONTA DE DESENVOLVEDOR
             if (username === DEV_ACCOUNT.username && password === DEV_ACCOUNT.password) {
@@ -881,7 +914,16 @@
                 return;
             }
             
-            const usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || []);
+            // ✅ CORREÇÃO: Buscar usuários do localStorage
+            let usuarios = [];
+            try {
+                usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || '[]');
+                console.log('👥 Usuários no sistema:', usuarios);
+            } catch (error) {
+                console.error('❌ Erro ao buscar usuários:', error);
+                usuarios = [];
+            }
+            
             const user = usuarios.find(u => u.username === username && u.password === password);
             
             if (user) {
@@ -942,11 +984,26 @@
             }
         }
 
-        // Inicializar
-        window.addEventListener('load', createNeonCircles);
+        // ✅ INICIALIZAÇÃO MELHORADA
+        function inicializarSistema() {
+            console.log('🚀 Inicializando sistema...');
+            
+            // Verificar se existem usuários
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_magicos') || '[]');
+            console.log('📊 Usuários cadastrados:', usuarios.length);
+            
+            // Verificar armazem
+            const armazem = localStorage.getItem('armazem_usuarios');
+            console.log('🏪 Dados no armazem:', armazem ? 'Sim' : 'Não');
+            
+            createNeonCircles();
+            applyTheme();
+            checkLoginStatus();
+        }
+
+        // Inicializar quando a página carregar
+        window.addEventListener('load', inicializarSistema);
         window.addEventListener('resize', createNeonCircles);
-        applyTheme();
-        checkLoginStatus();
     </script>
 </body>
 </html>
